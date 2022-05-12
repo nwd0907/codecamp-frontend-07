@@ -23,8 +23,19 @@ import {
   SubmitButton,
   Error,
 } from "../../../styles/emotion";
+import { gql, useMutation } from "@apollo/client";
+
+const CREATE_BOARD = gql`
+  mutation createBoard($createBoardInput: CreateBoardInput!) {
+    createBoard(createBoardInput: $createBoardInput) {
+      _id
+    }
+  }
+`;
 
 export default function BoardsNewPage() {
+  const [createBoard] = useMutation(CREATE_BOARD);
+  
   const [writer, setWriter] = useState("");
   const [password, setPassword] = useState("");
   const [title, setTitle] = useState("");
@@ -63,7 +74,7 @@ export default function BoardsNewPage() {
     }
   };
 
-  const onClickSubmit = () => {
+  const onClickSubmit = async () => {
     if (writer === "") {
       setWriterError("작성자를 입력해주세요.");
     }
@@ -77,6 +88,17 @@ export default function BoardsNewPage() {
       setContentsError("내용을 입력해주세요.");
     }
     if (writer !== "" && password !== "" && title !== "" && contents !== "") {
+      const result = await createBoard({
+        variables: {
+          createBoardInput: {
+            writer,
+            password,
+            title,
+            contents,
+          },
+        },
+      });
+      console.log(result);
       alert("게시글이 등록되었습니다.");
     }
   };
