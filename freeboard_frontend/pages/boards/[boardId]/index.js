@@ -30,9 +30,15 @@ export const FETCH_BOARD = gql`
 
 export default function BoardDetail() {
   const router = useRouter();
+  console.log(router)
+  console.log("주소: ", router.query.boardId)
 
   const { data } = useQuery(FETCH_BOARD,
-    { variables: { boardId: router.query.boardId } }
+    { 
+      variables: { 
+        boardId: router.query.boardId
+      } 
+    }
   );
 
   return (

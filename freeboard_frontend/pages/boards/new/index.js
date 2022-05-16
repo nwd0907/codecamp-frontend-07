@@ -77,32 +77,48 @@ export default function BoardsNewPage() {
   };
 
   const onClickSubmit = async () => {
-    if (writer === "") {
+    // 참과 거짓!
+
+    // 거짓
+    // false
+    // ""
+    // 0
+    // undefined
+    // null
+    // Not a Number(NaN)
+
+    if (!writer) {
       setWriterError("작성자를 입력해주세요.");
     }
-    if (password === "") {
+    if (!password) {
       setPasswordError("비밀번호를 입력해주세요.");
     }
-    if (title === "") {
+    if (!title) {
       setTitleError("제목을 입력해주세요.");
     }
-    if (contents === "") {
+    if (!contents) {
       setContentsError("내용을 입력해주세요.");
     }
-    if (writer !== "" && password !== "" && title !== "" && contents !== "") {
-      const result = await createBoard({
-        variables: {
-          createBoardInput: {
-            writer,
-            password,
-            title,
-            contents,
+    if (writer && password && title && contents) {
+      try {
+        const result = await createBoard({
+          variables: {
+            createBoardInput: {
+              writer,
+              password,
+              title,
+              contents,
+            },
           },
-        },
-      });
-      console.log(result);
-      alert("게시글이 등록되었습니다.");
-      router.push(`/boards/${result.data.createBoard._id}`)
+        });
+        console.log(result);
+        alert("게시글이 등록되었습니다.");
+        router.push(`/boards/${result.data.createBoard._id}`)
+      } catch(error){
+        console.log(error.message)
+        alert(error.message)
+      }
+      
     }
   };
 
