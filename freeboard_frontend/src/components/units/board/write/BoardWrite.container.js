@@ -63,7 +63,7 @@ export default function BoardWrite() {
     if (!password) {
       setPasswordError("비밀번호를 입력해주세요.");
     }
-    if (!title) {
+    if (!title) {r
       setTitleError("제목을 입력해주세요.");
     }
     if (!contents) {

@@ -8,6 +8,14 @@ export default function CounterStatePage(){
         // count = count + 1
         // console.log(count)
         setCount(count + 1)
+
+        setCount(2)
+
+        setCount(3)
+
+        setCount(4)
+
+        setCount(5)
     }
 
     // function counter(){
