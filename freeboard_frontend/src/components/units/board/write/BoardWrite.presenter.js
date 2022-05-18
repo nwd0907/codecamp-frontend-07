@@ -69,10 +69,10 @@ export default function BoardWriteUI(props) {
       </S.OptionWrapper>
       <S.ButtonWrapper>
         <S.SubmitButton 
-          onClick={props.onClickSubmit}
-          isActive={props.isActive}
+          onClick={props.isEdit ? props.onClickUpdate : props.onClickSubmit}
+          isActive={props.isEdit ? true : props.isActive}
         >
-          등록하기
+          {props.isEdit ? "수정하기" : "등록하기"}
         </S.SubmitButton>
       </S.ButtonWrapper>
     </S.Wrapper>
