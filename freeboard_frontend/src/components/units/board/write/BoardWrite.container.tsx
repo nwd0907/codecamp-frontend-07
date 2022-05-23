@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import BoardWriteUI from "./BoardWrite.presenter";
 import { CREATE_BOARD, UPDATE_BOARD } from "./BoardWrite.queries";
+import { IBoardWriteProps, IUpdateBoardInput } from "./BoardWrite.types";
 
-export default function BoardWrite(props) {
+export default function BoardWrite(props: IBoardWriteProps) {
   const router = useRouter();
   const [isActive, setIsActive] = useState(false);
   const [createBoard] = useMutation(CREATE_BOARD);
@@ -14,13 +15,14 @@ export default function BoardWrite(props) {
   const [password, setPassword] = useState("");
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
+  const [youtubeUrl, setYoutubeUrl] = useState("");
 
   const [writerError, setWriterError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [titleError, setTitleError] = useState("");
   const [contentsError, setContentsError] = useState("");
 
-  const onChangeWriter = (event) => {
+  const onChangeWriter = (event: ChangeEvent<HTMLInputElement>) => {
     setWriter(event.target.value);
     if (event.target.value !== "") {
       setWriterError("");
@@ -33,7 +35,7 @@ export default function BoardWrite(props) {
     }
   };
 
-  const onChangePassword = (event) => {
+  const onChangePassword = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
     if (event.target.value !== "") {
       setPasswordError("");
@@ -46,7 +48,7 @@ export default function BoardWrite(props) {
     }
   };
 
-  const onChangeTitle = (event) => {
+  const onChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
     if (event.target.value !== "") {
       setTitleError("");
@@ -59,7 +61,7 @@ export default function BoardWrite(props) {
     }
   };
 
-  const onChangeContents = (event) => {
+  const onChangeContents = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setContents(event.target.value);
     if (event.target.value !== "") {
       setContentsError("");
@@ -70,6 +72,10 @@ export default function BoardWrite(props) {
     } else {
       setIsActive(false);
     }
+  };
+
+  const onChangeYoutubeUrl = (event: ChangeEvent<HTMLInputElement>) => {
+    setYoutubeUrl(event.target.value);
   };
 
   const onClickSubmit = async () => {
@@ -89,7 +95,7 @@ export default function BoardWrite(props) {
     if (!password) {
       setPasswordError("비밀번호를 입력해주세요.");
     }
-    if (!title) {r
+    if (!title) {
       setTitleError("제목을 입력해주세요.");
     }
     if (!contents) {
@@ -104,6 +110,7 @@ export default function BoardWrite(props) {
               password,
               title,
               contents,
+              youtubeUrl,
             },
           },
         });
@@ -118,7 +125,7 @@ export default function BoardWrite(props) {
   };
 
   const onClickUpdate = async () => {
-    if (!title && !contents) {
+    if (!title && !contents && !youtubeUrl) {
       alert("수정한 내용이 없습니다.");
       return;
     }
@@ -128,22 +135,23 @@ export default function BoardWrite(props) {
       return;
     }
 
-    const updateBoardInput = {};
+    const updateBoardInput: IUpdateBoardInput = {};
     if (title) updateBoardInput.title = title;
     if (contents) updateBoardInput.contents = contents;
+    if (youtubeUrl) updateBoardInput.youtubeUrl = youtubeUrl;
 
     try {
       await updateBoard({
         variables: {
           boardId: router.query.boardId,
-          password: password,
-          updateBoardInput
+          password,
+          updateBoardInput,
         },
       });
-      alert("게시물 수정에 성공하였습니다!" );
+      alert("게시물 수정에 성공하였습니다!");
       router.push(`/boards/${router.query.boardId}`);
     } catch (error) {
-      alert(error.message)
+      alert(error.message);
     }
   };
 
@@ -158,6 +166,7 @@ export default function BoardWrite(props) {
       onChangePassword={onChangePassword}
       onChangeTitle={onChangeTitle}
       onChangeContents={onChangeContents}
+      onChangeYoutubeUrl={onChangeYoutubeUrl}
       onClickSubmit={onClickSubmit}
       onClickUpdate={onClickUpdate}
       isEdit={props.isEdit}
