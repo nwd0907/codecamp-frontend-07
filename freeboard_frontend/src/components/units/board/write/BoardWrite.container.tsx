@@ -4,10 +4,13 @@ import { useRouter } from "next/router";
 import BoardWriteUI from "./BoardWrite.presenter";
 import { CREATE_BOARD, UPDATE_BOARD } from "./BoardWrite.queries";
 import { IBoardWriteProps, IUpdateBoardInput } from "./BoardWrite.types";
+import { Modal } from "antd";
 
 export default function BoardWrite(props: IBoardWriteProps) {
   const router = useRouter();
   const [isActive, setIsActive] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
   const [createBoard] = useMutation(CREATE_BOARD);
   const [updateBoard] = useMutation(UPDATE_BOARD);
 
@@ -16,6 +19,9 @@ export default function BoardWrite(props: IBoardWriteProps) {
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
   const [youtubeUrl, setYoutubeUrl] = useState("");
+  const [zipcode, setZipcode] = useState("");
+  const [address, setAddress] = useState("");
+  const [addressDetail, setAddressDetail] = useState("");
 
   const [writerError, setWriterError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -78,6 +84,20 @@ export default function BoardWrite(props: IBoardWriteProps) {
     setYoutubeUrl(event.target.value);
   };
 
+  const onChangeAddressDetail = (event: ChangeEvent<HTMLInputElement>) => {
+    setAddressDetail(event.target.value);
+  };
+
+  const onClickAddressSearch = () => {
+    setIsOpen(true);
+  };
+
+  const onCompleteAddressSearch = (data: any) => {
+    setAddress(data.address);
+    setZipcode(data.zonecode);
+    setIsOpen(false);
+  };
+
   const onClickSubmit = async () => {
     // 참과 거짓!
 
@@ -111,21 +131,35 @@ export default function BoardWrite(props: IBoardWriteProps) {
               title,
               contents,
               youtubeUrl,
+              boardAddress: {
+                zipcode,
+                address,
+                addressDetail,
+              },
             },
           },
         });
         console.log(result);
-        alert("게시글이 등록되었습니다.");
+        // alert("게시글이 등록되었습니다.");
+        Modal.success({ content: "게시글이 등록되었습니다." });
         router.push(`/boards/${result.data.createBoard._id}`);
       } catch (error) {
-        console.log(error.message);
-        alert(error.message);
+        // console.log(error.message);
+        // alert(error.message);
+        Modal.error({ content: error.message });
       }
     }
   };
 
   const onClickUpdate = async () => {
-    if (!title && !contents && !youtubeUrl) {
+    if (
+      !title &&
+      !contents &&
+      !youtubeUrl &&
+      !address &&
+      !addressDetail &&
+      !zipcode
+    ) {
       alert("수정한 내용이 없습니다.");
       return;
     }
@@ -139,6 +173,13 @@ export default function BoardWrite(props: IBoardWriteProps) {
     if (title) updateBoardInput.title = title;
     if (contents) updateBoardInput.contents = contents;
     if (youtubeUrl) updateBoardInput.youtubeUrl = youtubeUrl;
+    if (zipcode || address || addressDetail) {
+      updateBoardInput.boardAddress = {};
+      if (zipcode) updateBoardInput.boardAddress.zipcode = zipcode;
+      if (address) updateBoardInput.boardAddress.address = address;
+      if (addressDetail)
+        updateBoardInput.boardAddress.addressDetail = addressDetail;
+    }
 
     try {
       await updateBoard({
@@ -148,10 +189,12 @@ export default function BoardWrite(props: IBoardWriteProps) {
           updateBoardInput,
         },
       });
-      alert("게시물 수정에 성공하였습니다!");
+      // alert("게시물 수정에 성공하였습니다!");
+      Modal.success({ content: "게시물 수정에 성공하였습니다!" });
       router.push(`/boards/${router.query.boardId}`);
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
+      Modal.error({ content: error.message });
     }
   };
 
@@ -167,10 +210,17 @@ export default function BoardWrite(props: IBoardWriteProps) {
       onChangeTitle={onChangeTitle}
       onChangeContents={onChangeContents}
       onChangeYoutubeUrl={onChangeYoutubeUrl}
+      onChangeAddressDetail={onChangeAddressDetail}
+      onClickAddressSearch={onClickAddressSearch}
+      onCompleteAddressSearch={onCompleteAddressSearch}
       onClickSubmit={onClickSubmit}
       onClickUpdate={onClickUpdate}
       isEdit={props.isEdit}
       data={props.data}
+      isOpen={isOpen}
+      zipcode={zipcode}
+      address={address}
+      addressDetail={addressDetail}
     />
   );
 }
