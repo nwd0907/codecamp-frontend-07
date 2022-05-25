@@ -1,7 +1,8 @@
 import * as S from "./BoardList.styles";
-import { getDate } from '../../../../commons/libraries/utils'
+import { getDate } from "../../../../commons/libraries/utils";
+import { IBoardListUIProps } from "./BoardList.types";
 
-export default function BoardListUI(props) {
+export default function BoardListUI(props: IBoardListUIProps) {
   return (
     <S.Wrapper>
       <S.TableTop />
@@ -16,7 +17,9 @@ export default function BoardListUI(props) {
           <S.ColumnBasic>
             {String(el._id).slice(-4).toUpperCase()}
           </S.ColumnBasic>
-          <S.ColumnTitle id={el._id} onClick={props.onClickMoveToBoardDetail}>{el.title}</S.ColumnTitle>
+          <S.ColumnTitle id={el._id} onClick={props.onClickMoveToBoardDetail}>
+            {el.title}
+          </S.ColumnTitle>
           <S.ColumnBasic>{el.writer}</S.ColumnBasic>
           <S.ColumnBasic>{getDate(el.createdAt)}</S.ColumnBasic>
         </S.Row>
