@@ -1,6 +1,8 @@
-import { MouseEvent } from "react";
-
 export interface IBoardCommentListUIProps {
   data?: any;
-  onClickDelete: (event: MouseEvent<HTMLImageElement>) => void;
+  onLoadMore: () => void;
+}
+
+export interface IBoardCommentListUIItemProps {
+  el: any;
 }
