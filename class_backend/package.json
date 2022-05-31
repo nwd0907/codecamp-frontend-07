@@ -1,0 +1,17 @@
+{
+  "name": "class_backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node bbb.ts"
+  },
+  "devDependencies": {
+    "typescript": "^4.7.2"
+  },
+  "dependencies": {
+    "pg": "^8.7.3",
+    "ts-node": "^10.8.0",
+    "typeorm": "^0.3.6"
+  }
+}
