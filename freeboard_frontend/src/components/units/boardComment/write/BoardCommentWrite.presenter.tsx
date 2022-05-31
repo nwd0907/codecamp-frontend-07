@@ -14,7 +14,7 @@ export default function BoardCommentWriteUI(props: IBoardCommentWriteUIProps) {
         <S.Input
           placeholder="작성자"
           readOnly={!!props.el?.writer}
-          defaultValue={props.el?.writer || ""}
+          defaultValue={props.el?.writer}
           onChange={props.onChangeWriter}
         />
         <S.Input

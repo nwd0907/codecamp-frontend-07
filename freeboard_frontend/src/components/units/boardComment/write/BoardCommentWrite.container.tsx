@@ -54,7 +54,7 @@ export default function BoardCommentWrite(props: IBoardCommentWriteProps) {
         ],
       });
     } catch (error) {
-      alert(error.message);
+      if (error instanceof Error) alert(error.message);
     }
   };
 
@@ -69,8 +69,6 @@ export default function BoardCommentWrite(props: IBoardCommentWriteProps) {
     }
 
     try {
-      if (!props.el?._id) return;
-
       const updateBoardCommentInput: IUpdateBoardCommentInput = {};
       if (contents) updateBoardCommentInput.contents = contents;
       if (star !== props.el?.rating) updateBoardCommentInput.rating = star;
@@ -90,7 +88,7 @@ export default function BoardCommentWrite(props: IBoardCommentWriteProps) {
       });
       props.setIsEdit?.(false);
     } catch (error) {
-      alert(error.message);
+      if (error instanceof Error) alert(error.message);
     }
   };
 
