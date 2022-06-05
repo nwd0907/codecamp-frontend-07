@@ -2,8 +2,6 @@ import { getDate } from "../../../../commons/libraries/utils";
 import { IBoardDetailUIProps } from "./BoardDetail.types";
 import * as S from "./BoardDetail.styles";
 import { Tooltip } from "antd";
-import BoardCommentWrite from "../../boardComment/write/BoardCommentWrite.container";
-import BoardCommentList from "../../boardComment/list/BoardCommentList.container";
 
 export default function BoardDetailUI(props: IBoardDetailUIProps) {
   return (
@@ -32,6 +30,16 @@ export default function BoardDetailUI(props: IBoardDetailUIProps) {
           </S.Header>
           <S.Body>
             <S.Title>{props.data?.fetchBoard?.title}</S.Title>
+            <S.ImageWrapper>
+              {props.data?.fetchBoard.images
+                ?.filter((el: string) => el)
+                .map((el: string) => (
+                  <S.Image
+                    key={el}
+                    src={`https://storage.googleapis.com/${el}`}
+                  />
+                ))}
+            </S.ImageWrapper>
             <S.Contents>{props.data?.fetchBoard?.contents}</S.Contents>
             {props.data?.fetchBoard.youtubeUrl && (
               <S.Youtube
