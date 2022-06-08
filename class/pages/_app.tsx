@@ -14,6 +14,9 @@ import { createUploadLink } from "apollo-upload-client";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { RecoilRoot, useRecoilState, useSetRecoilState } from "recoil";
+import { accessTokenState } from "../src/commons/store";
+import ApolloSetting from "../src/components/commons/apollo";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -31,22 +34,15 @@ const firebaseConfig = {
 export const firebaseApp = initializeApp(firebaseConfig);
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const uploadLink = createUploadLink({
-    uri: "http://backend07.codebootcamp.co.kr/graphql",
-  });
-
-  const client = new ApolloClient({
-    link: ApolloLink.from([uploadLink as unknown as ApolloLink]),
-    cache: new InMemoryCache(),
-  });
-
   return (
-    <ApolloProvider client={client}>
-      <Global styles={globalStyles} />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </ApolloProvider>
+    <RecoilRoot>
+      <ApolloSetting>
+        <Global styles={globalStyles} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ApolloSetting>
+    </RecoilRoot>
   );
 }
 
