@@ -4,7 +4,6 @@ const getAny = (args: any) => {
 };
 const result1 = getAny("철수");
 
-
 // 2. unknown 타입 (개발자에게 안전하게 코딩하도록 유도!!)
 const getUnknown = (args: unknown) => {
   if (typeof args === "number") {
