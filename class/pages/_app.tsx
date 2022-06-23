@@ -41,7 +41,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           type="text/javascript"
           src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cfdf1830a138b5b636a4b8216d821441"
         ></script>
-      </Head> */}
+      </Head>    */}
       <RecoilRoot>
         <ApolloSetting>
           <Global styles={globalStyles} />
